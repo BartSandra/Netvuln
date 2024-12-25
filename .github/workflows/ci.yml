@@ -1,0 +1,61 @@
+name: Go CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SERVICE_ADDRESS: ":50051"
+      LOG_LEVEL: "INFO"
+
+    steps:
+    # Шаг 1: Клонирование репозитория
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Шаг 2: Установка Go
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.22.2'
+
+    # Шаг 3: Установка зависимостей
+    - name: Install dependencies
+      run: |
+        go mod download
+
+    # Шаг 4: Установка Nmap
+    - name: Install Nmap
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y nmap
+
+    # Шаг 5: Проверка окружения
+    - name: Verify environment
+      run: |
+        which nmap
+        echo "SERVICE_ADDRESS: $SERVICE_ADDRESS"
+        echo "LOG_LEVEL: $LOG_LEVEL"
+
+    # Шаг 6: Очистка кеша Go
+    - name: Clear Go cache
+      run: go clean -testcache
+
+    # Шаг 7: Запуск тестов
+    - name: Run tests
+      env:
+        SERVICE_ADDRESS: ":50051"
+        LOG_LEVEL: "DEBUG"
+      run: make test
+
+    # Шаг 8: Сборка приложения
+    - name: Build
+      run: |
+        make build
