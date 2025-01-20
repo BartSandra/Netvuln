@@ -98,7 +98,7 @@ make run-client
 или
 
 ```
-go run cmd/client/main.go --address localhost:50051 --targets 192.168.100.14 --port 80
+go run cmd/client/main.go --address localhost:50051 --targets 8.8.8.8 --port 80
 ```
 
 Здесь:
@@ -127,9 +127,9 @@ nmap --script=vulners --version
 
 Запустите клиент с целевым хостом, на котором есть уязвимый сервис. Например:
 ```
-go run cmd/client/main.go -address=localhost:50051 -targets=192.168.100.14 -port=80
+go run cmd/client/main.go -address=localhost:50051 -targets=8.8.8.8 -port=80
 
-Где 192.168.100.14 — это IP-адрес уязвимого хоста.
+Где 8.8.8.8 — это IP-адрес уязвимого хоста.
 ```
 
 После выполнения запроса вы получите ответ, который будет содержать информацию о найденных уязвимостях, если таковые имеются.
@@ -168,7 +168,7 @@ make test-client
 
 Пример команды:
 ```
-grpcurl -plaintext -d '{"targets":["192.168.1.1"], "tcp_port":80}' localhost:50051 netvuln.v1.NetVulnService/CheckVuln
+grpcurl -plaintext -d '{"targets":["8.8.8.8"], "tcp_port":80}' localhost:50051 netvuln.v1.NetVulnService/CheckVuln
 ```
 
 Заключение
